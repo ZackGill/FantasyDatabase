@@ -1,0 +1,1014 @@
+SQL> 
+SQL> 
+SQL> /*
+SQL> Gabriel Stepanovich
+SQL> Silas Vincent
+SQL> Sean Holloway
+SQL> Reece Baldwin
+SQL> Zachary Gill
+SQL> */
+SQL> --
+SQL> 
+SQL> DROP TABLE items CASCADE CONSTRAINTS;
+
+Table dropped.
+
+SQL> 
+SQL> DROP TABLE characters CASCADE CONSTRAINTS;
+
+Table dropped.
+
+SQL> 
+SQL> DROP TABLE carrying CASCADE CONSTRAINTS;
+
+Table dropped.
+
+SQL> 
+SQL> DROP TABLE skills CASCADE CONSTRAINTS;
+
+Table dropped.
+
+SQL> 
+SQL> DROP TABLE sells CASCADE CONSTRAINTS;
+
+Table dropped.
+
+SQL> 
+SQL> DROP TABLE shops CASCADE CONSTRAINTS;
+
+Table dropped.
+
+SQL> 
+SQL> DROP TABLE towns CASCADE CONSTRAINTS;
+
+Table dropped.
+
+SQL> 
+SQL> DROP TABLE regions CASCADE CONSTRAINTS;
+
+Table dropped.
+
+SQL> 
+SQL> DROP TABLE dungeons CASCADE CONSTRAINTS;
+
+Table dropped.
+
+SQL> 
+SQL> DROP TABLE monsters CASCADE CONSTRAINTS;
+
+Table dropped.
+
+SQL> 
+SQL> DROP TABLE infests CASCADE CONSTRAINTS;
+
+Table dropped.
+
+SQL> 
+SQL> DROP TABLE boss_monsters CASCADE CONSTRAINTS;
+
+Table dropped.
+
+SQL> 
+SQL> --
+SQL> 
+SQL> CREATE TABLE items
+  2  (
+  3  	 iName VARCHAR(30),
+  4  	 iDescription VARCHAR(100) NOT NULL,
+  5  	 iType VARCHAR(15) NOT NULL,
+  6  	     --
+  7  	 CONSTRAINT iPK PRIMARY KEY (iName)
+  8  );
+
+Table created.
+
+SQL> 
+SQL> --
+SQL> 
+SQL> CREATE TABLE characters
+  2  (
+  3  	 cName VARCHAR(30),
+  4  	 cLevel INTEGER NOT NULL,
+  5  	 race VARCHAR(15) NOT NULL,
+  6  	 mp INTEGER NOT NULL,
+  7  	 hp INTEGER NOT NULL,
+  8  	 str INTEGER NOT NULL,
+  9  	 int INTEGER NOT NULL,
+ 10  	 dex INTEGER NOT NULL,
+ 11  	 mentor VARCHAR(30),
+ 12  	 cRegion VARCHAR(30),
+ 13  	     --
+ 14  	 CONSTRAINT cLVL CHECK (cLevel >= 1 AND cLevel <= 100),
+ 15  	 CONSTRAINT cPK PRIMARY KEY(cName)
+ 16  );
+
+Table created.
+
+SQL> 
+SQL> --
+SQL> 
+SQL> CREATE TABLE carrying
+  2  (
+  3  	 itemName VARCHAR(30),
+  4  	 chName VARCHAR(30),
+  5  	 --
+  6  	 CONSTRAINT caPK PRIMARY KEY (itemName, chName)
+  7  );
+
+Table created.
+
+SQL> 
+SQL> --
+SQL> 
+SQL> CREATE TABLE skills
+  2  (
+  3  	 kName VARCHAR(30),
+  4  	 charName VARCHAR(30),
+  5  	 --
+  6  	 CONSTRAINT skPK PRIMARY KEY (kName, charName)
+  7  );
+
+Table created.
+
+SQL> 
+SQL> --
+SQL> 
+SQL> CREATE TABLE shops
+  2  (
+  3  	 sName VARCHAR(30),
+  4  	 sType VARCHAR(10) NOT NULL,
+  5  	 sTown VARCHAR(30) NOT NULL,
+  6  	 --
+  7  	 CONSTRAINT shPK PRIMARY KEY (sName)
+  8  );
+
+Table created.
+
+SQL> 
+SQL> --
+SQL> 
+SQL> CREATE TABLE sells
+  2  (
+  3  	 itemName VARCHAR(30),
+  4  	 storeName VARCHAR(30) NOT NULL,
+  5  	 iPrice NUMBER NOT NULL,
+  6  	 --
+  7  	 CONSTRAINT sePK PRIMARY KEY (itemName, storeName)
+  8  );
+
+Table created.
+
+SQL> 
+SQL> --
+SQL> 
+SQL> CREATE TABLE regions
+  2  (
+  3  	 rName VARCHAR(30),
+  4  	 population NUMBER,
+  5  	 number_of_towns NUMBER,
+  6  	 --
+  7  	 CONSTRAINT rPK PRIMARY KEY (rName)
+  8  );
+
+Table created.
+
+SQL> 
+SQL> --
+SQL> 
+SQL> CREATE TABLE towns
+  2  (
+  3  	 tName VARCHAR(30),
+  4  	 tRegion VARCHAR(30) NOT NULL,
+  5  	     --
+  6  	 CONSTRAINT tPK PRIMARY KEY (tName)
+  7  );
+
+Table created.
+
+SQL> 
+SQL> --
+SQL> 
+SQL> CREATE TABLE dungeons
+  2  (
+  3  	 dName VARCHAR(30),
+  4  	 dLevel NUMBER NOT NULL,
+  5  	 dRegion VARCHAR(30) NOT NULL,
+  6  	 --
+  7  	 CONSTRAINT dPK PRIMARY KEY (dName)
+  8  );
+
+Table created.
+
+SQL> 
+SQL> --
+SQL> 
+SQL> CREATE TABLE monsters
+  2  (
+  3  	 mName VARCHAR(30),
+  4  	 mLevel INTEGER NOT NULL,
+  5  	 loot VARCHAR(30),
+  6  	 mHP INTEGER,
+  7  	 mMP INTEGER,
+  8  	 mSTR INTEGER,
+  9  	 mDEX INTEGER,
+ 10  	 mINT INTEGER,
+ 11  	 --
+ 12  	 CONSTRAINT mLoot CHECK (loot IS NOT NULL OR mLevel < 10),
+ 13  	 CONSTRAINT mPK PRIMARY KEY (mName)
+ 14  );
+
+Table created.
+
+SQL> 
+SQL> --
+SQL> 
+SQL> CREATE TABLE infests
+  2  (
+  3  	 monster VARCHAR(30),
+  4  	 dungeon VARCHAR(30),
+  5  	 --
+  6  	 CONSTRAINT infPK PRIMARY KEY (monster, dungeon)
+  7  );
+
+Table created.
+
+SQL> 
+SQL> --
+SQL> 
+SQL> CREATE TABLE boss_monsters
+  2  (
+  3  	 bName VARCHAR(30),
+  4  	 dunName VARCHAR(30),
+  5  	 bLevel INTEGER,
+  6  	 bHP INTEGER,
+  7  	 bMP INTEGER,
+  8  	 bSTR INTEGER,
+  9  	 bDEX INTEGER,
+ 10  	 bINT INTEGER,
+ 11  	 bLoot VARCHAR(30),
+ 12  	 --
+ 13  	 CONSTRAINT bPK PRIMARY KEY (bName)
+ 14  );
+
+Table created.
+
+SQL> 
+SQL> --
+SQL> 
+SQL> --Foreign Keys
+SQL> 
+SQL> ALTER TABLE characters ADD CONSTRAINT cFK FOREIGN KEY (cRegion) references regions(rName);
+
+Table altered.
+
+SQL> 
+SQL> ALTER TABLE carrying ADD CONSTRAINT carIFK FOREIGN KEY (itemName) references items(iName);
+
+Table altered.
+
+SQL> 
+SQL> ALTER TABLE carrying ADD CONSTRAINT carCHFK FOREIGN KEY (chName) references characters(cName);
+
+Table altered.
+
+SQL> 
+SQL> ALTER TABLE towns ADD CONSTRAINT tFK FOREIGN KEY (tRegion) references regions(rName);
+
+Table altered.
+
+SQL> 
+SQL> ALTER TABLE skills ADD CONSTRAINT skillFK FOREIGN KEY (charName) references characters(cName);
+
+Table altered.
+
+SQL> 
+SQL> ALTER TABLE shops ADD CONSTRAINT shopFK FOREIGN KEY (sTown) references towns(tName);
+
+Table altered.
+
+SQL> 
+SQL> ALTER TABLE sells ADD CONSTRAINT sellsItemFK FOREIGN KEY (itemName) references items(iName);
+
+Table altered.
+
+SQL> 
+SQL> ALTER TABLE sells ADD CONSTRAINT sellsStoreFK FOREIGN KEY (storeName) references shops(sName);
+
+Table altered.
+
+SQL> 
+SQL> ALTER TABLE dungeons ADD CONSTRAINT dunFK FOREIGN KEY (dRegion) references regions(rName);
+
+Table altered.
+
+SQL> 
+SQL> ALTER TABLE monsters ADD CONSTRAINT mFK FOREIGN KEY (loot) references items(iName);
+
+Table altered.
+
+SQL> 
+SQL> ALTER TABLE infests ADD CONSTRAINT infestMonFK FOREIGN KEY (monster) references monsters(mName);
+
+Table altered.
+
+SQL> 
+SQL> ALTER TABLE infests ADD CONSTRAINT infestDunFK FOREIGN KEY (dungeon) references dungeons(dName);
+
+Table altered.
+
+SQL> 
+SQL> ALTER TABLE boss_monsters ADD CONSTRAINT bossDunFK FOREIGN KEY (dunName) references dungeons(dName);
+
+Table altered.
+
+SQL> 
+SQL> ALTER TABLE boss_monsters ADD CONSTRAINT bossLootFK FOREIGN KEY (bLoot) references items(iName);
+
+Table altered.
+
+SQL> 
+SQL> --
+SQL> 
+SQL> 
+SQL> SET FEEDBACK OFF
+SQL> --Inserts Below
+SQL> 
+SQL> --Items
+SQL> 
+SQL> INSERT INTO items VALUES('potion', 'A healing beverage', 'consumable');
+SQL> 
+SQL> INSERT INTO items VALUES ('ham', 'Delicious meat', 'consumable');
+SQL> 
+SQL> INSERT INTO items VALUES ('milk', 'Got it!', 'consumable');
+SQL> 
+SQL> INSERT INTO items VALUES ('Hellscream"s Doomblade', 'Death to the Alliance!', 'Sword');
+SQL> 
+SQL> INSERT INTO items VALUES ('Mystery meat', 'Please tell me you"re not going to eat this?', 'consumable');
+SQL> 
+SQL> INSERT INTO items VALUES ('Gungnir', 'Odin"s spear', 'Spear');
+SQL> 
+SQL> INSERT INTO items VALUES ('Rhongomiant', 'Athurian spear of legend', 'Spear');
+SQL> 
+SQL> INSERT INTO items VALUES ('Aiglos', 'Elven spear of Gil-galad', 'Spear');
+SQL> 
+SQL> INSERT INTO items VALUES ('Darkwood Staff', 'Stout staff', 'Staff');
+SQL> 
+SQL> 
+SQL> 
+SQL> --Regions
+SQL> 
+SQL> INSERT INTO regions VALUES ('Arcadia', 38000, 12);
+SQL> 
+SQL> INSERT INTO regions VALUES ('Shadow Isles', 400, 1);
+SQL> 
+SQL> 
+SQL> --Monsters and dungeons
+SQL> 
+SQL> 
+SQL> INSERT INTO monsters VALUES ('Goblin', 10, 'potion', 300, 90, 70, 55, 30);
+SQL> INSERT INTO monsters VALUES ('Zombie', 15, 'Mystery meat', 500, 10, 90, 40, 5);
+SQL> INSERT INTO monsters VALUES ('Ghoul', 15, 'milk', 400, 30, 80, 60, 25);
+SQL> INSERT INTO monsters VALUES ('Dire Rat', 2, 'Mystery meat', 50, 10, 10, 10, 10);
+SQL> INSERT INTO monsters VALUES ('Wolf', 10, 'ham', 250, 50, 70, 60, 20);
+SQL> 
+SQL> 
+SQL> 
+SQL> INSERT INTO dungeons VALUES ('Castle Ruins', 15, 'Arcadia');
+SQL> 
+SQL> 
+SQL> INSERT INTO dungeons VALUES ('Abadoned Mines', 20, 'Shadow Isles');
+SQL> 
+SQL> INSERT INTO boss_monsters VALUES ('Goblin King', 'Castle Ruins', 15, 1500, 150, 120, 70, 50, 'potion');
+SQL> 
+SQL> INSERT INTO infests VALUES ('Goblin', 'Castle Ruins');
+SQL> 
+SQL> INSERT INTO boss_monsters VALUES ('Death Knight', 'Abadoned Mines', 25, 2000, 160, 150, 80, 70, 'Hellscream"s Doomblade');
+SQL> 
+SQL> INSERT INTO infests VALUES ('Zombie', 'Abadoned Mines');
+SQL> INSERT INTO infests VALUES ('Ghoul', 'Abadoned Mines');
+SQL> 
+SQL> 
+SQL> --Towns
+SQL> 
+SQL> INSERT INTO towns VALUES ('Veil', 'Arcadia');
+SQL> 
+SQL> INSERT INTO towns VALUES ('Port Prodigal', 'Shadow Isles');
+SQL> 
+SQL> 
+SQL> --Shops
+SQL> 
+SQL> INSERT INTO shops VALUES ('Bob"s Bows', 'Weapon', 'Veil');
+SQL> 
+SQL> INSERT INTO shops VALUES ('Jeff"s Barn', 'Grocery', 'Port Prodigal');
+SQL> 
+SQL> INSERT INTO shops VALUES ('Polearm Emporium', 'Weapon', 'Port Prodigal');
+SQL> 
+SQL> INSERT INTO shops VALUES ('The Loot Bin', 'Misc', 'Veil');
+SQL> 
+SQL> 
+SQL> --Sells
+SQL> 
+SQL> INSERT INTO sells VALUES ('potion', 'The Loot Bin', '150');
+SQL> 
+SQL> INSERT INTO sells VALUES ('ham', 'Jeff"s Barn', '25');
+SQL> 
+SQL> INSERT INTO sells VALUES ('milk', 'Jeff"s Barn', '20');
+SQL> 
+SQL> INSERT INTO sells VALUES ('Mystery meat', 'Jeff"s Barn', '10');
+SQL> 
+SQL> INSERT INTO sells VALUES ('Gungnir', 'Polearm Emporium', '150');
+SQL> 
+SQL> INSERT INTO sells VALUES ('Rhongomiant', 'Polearm Emporium', '250');
+SQL> 
+SQL> INSERT INTO sells VALUES ('Aiglos', 'Polearm Emporium', '400');
+SQL> 
+SQL> INSERT INTO sells VALUES ('Darkwood Staff', 'Polearm Emporium', '50');
+SQL> 
+SQL> 
+SQL> 
+SQL> --Characters
+SQL> 
+SQL> INSERT INTO characters VALUES('Syllphi Yaru', 45, 'Elf', 2500, 1700, 100, 178, 121, null, null);
+SQL> 
+SQL> INSERT INTO characters VALUES('Locke', 88, 'Human', 5400, 3020, 160, 500, 100, null, 'Shadow Isles');
+SQL> 
+SQL> INSERT INTO characters VALUES('Gebadia', 70, 'Human', 9001, 9001, 260, 140, 210, 'Locke', 'Shadow Isles');
+SQL> 
+SQL> INSERT INTO characters VALUES('Garrosh Hellscream', 99, 'Orc', 10500, 2000, 640, 190, 540, null, null);
+SQL> 
+SQL> 
+SQL> --Char Skills and Carried items
+SQL> 
+SQL> INSERT INTO carrying VALUES ('potion', 'Syllphi Yaru');
+SQL> 
+SQL> INSERT INTO carrying VALUES ('Hellscream"s Doomblade', 'Garrosh Hellscream');
+SQL> 
+SQL> INSERT INTO skills VALUES ('Charge', 'Garrosh Hellscream');
+SQL> 
+SQL> INSERT INTO skills VALUES ('Cure', 'Syllphi Yaru');
+SQL> 
+SQL> INSERT INTO skills VALUES ('Summon Void Walker', 'Gebadia');
+SQL> 
+SQL> INSERT INTO skills VALUES ('Summon Imp', 'Gebadia');
+SQL> 
+SQL> INSERT INTO skills VALUES ('Summon Jaraxxus', 'Locke');
+SQL> 
+SQL> SET FEEDBACK ON
+SQL> COMMIT
+  2  --
+  3  
+SQL> 
+SQL> -- Printing out database
+SQL> SELECT * FROM items;
+
+INAME                                                                           
+------------------------------                                                  
+IDESCRIPTION                                                                    
+--------------------------------------------------------------------------------
+ITYPE                                                                           
+---------------                                                                 
+potion                                                                          
+A healing beverage                                                              
+consumable                                                                      
+                                                                                
+ham                                                                             
+Delicious meat                                                                  
+consumable                                                                      
+
+INAME                                                                           
+------------------------------                                                  
+IDESCRIPTION                                                                    
+--------------------------------------------------------------------------------
+ITYPE                                                                           
+---------------                                                                 
+                                                                                
+milk                                                                            
+Got it!                                                                         
+consumable                                                                      
+                                                                                
+Hellscream"s Doomblade                                                          
+Death to the Alliance!                                                          
+
+INAME                                                                           
+------------------------------                                                  
+IDESCRIPTION                                                                    
+--------------------------------------------------------------------------------
+ITYPE                                                                           
+---------------                                                                 
+Sword                                                                           
+                                                                                
+Mystery meat                                                                    
+Please tell me you"re not going to eat this?                                    
+consumable                                                                      
+                                                                                
+Gungnir                                                                         
+
+INAME                                                                           
+------------------------------                                                  
+IDESCRIPTION                                                                    
+--------------------------------------------------------------------------------
+ITYPE                                                                           
+---------------                                                                 
+Odin"s spear                                                                    
+Spear                                                                           
+                                                                                
+Rhongomiant                                                                     
+Athurian spear of legend                                                        
+Spear                                                                           
+                                                                                
+
+INAME                                                                           
+------------------------------                                                  
+IDESCRIPTION                                                                    
+--------------------------------------------------------------------------------
+ITYPE                                                                           
+---------------                                                                 
+Aiglos                                                                          
+Elven spear of Gil-galad                                                        
+Spear                                                                           
+                                                                                
+Darkwood Staff                                                                  
+Stout staff                                                                     
+Staff                                                                           
+
+INAME                                                                           
+------------------------------                                                  
+IDESCRIPTION                                                                    
+--------------------------------------------------------------------------------
+ITYPE                                                                           
+---------------                                                                 
+                                                                                
+
+9 rows selected.
+
+SQL> SELECT * FROM sells;
+
+ITEMNAME                       STORENAME                          IPRICE        
+------------------------------ ------------------------------ ----------        
+potion                         The Loot Bin                          150        
+ham                            Jeff"s Barn                            25        
+milk                           Jeff"s Barn                            20        
+Mystery meat                   Jeff"s Barn                            10        
+Gungnir                        Polearm Emporium                      150        
+Rhongomiant                    Polearm Emporium                      250        
+Aiglos                         Polearm Emporium                      400        
+Darkwood Staff                 Polearm Emporium                       50        
+
+8 rows selected.
+
+SQL> SELECT * FROM characters;
+
+CNAME                              CLEVEL RACE                    MP         HP 
+------------------------------ ---------- --------------- ---------- ---------- 
+       STR        INT        DEX MENTOR                                         
+---------- ---------- ---------- ------------------------------                 
+CREGION                                                                         
+------------------------------                                                  
+Syllphi Yaru                           45 Elf                   2500       1700 
+       100        178        121                                                
+                                                                                
+                                                                                
+Locke                                  88 Human                 5400       3020 
+       160        500        100                                                
+Shadow Isles                                                                    
+
+CNAME                              CLEVEL RACE                    MP         HP 
+------------------------------ ---------- --------------- ---------- ---------- 
+       STR        INT        DEX MENTOR                                         
+---------- ---------- ---------- ------------------------------                 
+CREGION                                                                         
+------------------------------                                                  
+                                                                                
+Gebadia                                70 Human                 9001       9001 
+       260        140        210 Locke                                          
+Shadow Isles                                                                    
+                                                                                
+Garrosh Hellscream                     99 Orc                  10500       2000 
+       640        190        540                                                
+
+CNAME                              CLEVEL RACE                    MP         HP 
+------------------------------ ---------- --------------- ---------- ---------- 
+       STR        INT        DEX MENTOR                                         
+---------- ---------- ---------- ------------------------------                 
+CREGION                                                                         
+------------------------------                                                  
+                                                                                
+                                                                                
+
+4 rows selected.
+
+SQL> SELECT * FROM shops;
+
+SNAME                          STYPE      STOWN                                 
+------------------------------ ---------- ------------------------------        
+Bob"s Bows                     Weapon     Veil                                  
+Jeff"s Barn                    Grocery    Port Prodigal                         
+Polearm Emporium               Weapon     Port Prodigal                         
+The Loot Bin                   Misc       Veil                                  
+
+4 rows selected.
+
+SQL> SELECT * FROM carrying;
+
+ITEMNAME                       CHNAME                                           
+------------------------------ ------------------------------                   
+Hellscream"s Doomblade         Garrosh Hellscream                               
+potion                         Syllphi Yaru                                     
+
+2 rows selected.
+
+SQL> SELECT * FROM skills;
+
+KNAME                          CHARNAME                                         
+------------------------------ ------------------------------                   
+Charge                         Garrosh Hellscream                               
+Cure                           Syllphi Yaru                                     
+Summon Imp                     Gebadia                                          
+Summon Jaraxxus                Locke                                            
+Summon Void Walker             Gebadia                                          
+
+5 rows selected.
+
+SQL> SELECT * FROM towns;
+
+TNAME                          TREGION                                          
+------------------------------ ------------------------------                   
+Veil                           Arcadia                                          
+Port Prodigal                  Shadow Isles                                     
+
+2 rows selected.
+
+SQL> SELECT * FROM monsters;
+
+MNAME                              MLEVEL LOOT                                  
+------------------------------ ---------- ------------------------------        
+       MHP        MMP       MSTR       MDEX       MINT                          
+---------- ---------- ---------- ---------- ----------                          
+Goblin                                 10 potion                                
+       300         90         70         55         30                          
+                                                                                
+Zombie                                 15 Mystery meat                          
+       500         10         90         40          5                          
+                                                                                
+Ghoul                                  15 milk                                  
+       400         30         80         60         25                          
+                                                                                
+
+MNAME                              MLEVEL LOOT                                  
+------------------------------ ---------- ------------------------------        
+       MHP        MMP       MSTR       MDEX       MINT                          
+---------- ---------- ---------- ---------- ----------                          
+Dire Rat                                2 Mystery meat                          
+        50         10         10         10         10                          
+                                                                                
+Wolf                                   10 ham                                   
+       250         50         70         60         20                          
+                                                                                
+
+5 rows selected.
+
+SQL> SELECT * FROM infests;
+
+MONSTER                        DUNGEON                                          
+------------------------------ ------------------------------                   
+Ghoul                          Abadoned Mines                                   
+Goblin                         Castle Ruins                                     
+Zombie                         Abadoned Mines                                   
+
+3 rows selected.
+
+SQL> SELECT * FROM boss_monsters;
+
+BNAME                          DUNNAME                            BLEVEL        
+------------------------------ ------------------------------ ----------        
+       BHP        BMP       BSTR       BDEX       BINT                          
+---------- ---------- ---------- ---------- ----------                          
+BLOOT                                                                           
+------------------------------                                                  
+Goblin King                    Castle Ruins                           15        
+      1500        150        120         70         50                          
+potion                                                                          
+                                                                                
+Death Knight                   Abadoned Mines                         25        
+      2000        160        150         80         70                          
+Hellscream"s Doomblade                                                          
+
+BNAME                          DUNNAME                            BLEVEL        
+------------------------------ ------------------------------ ----------        
+       BHP        BMP       BSTR       BDEX       BINT                          
+---------- ---------- ---------- ---------- ----------                          
+BLOOT                                                                           
+------------------------------                                                  
+                                                                                
+
+2 rows selected.
+
+SQL> SELECT * FROM dungeons;
+
+DNAME                              DLEVEL DREGION                               
+------------------------------ ---------- ------------------------------        
+Castle Ruins                           15 Arcadia                               
+Abadoned Mines                         20 Shadow Isles                          
+
+2 rows selected.
+
+SQL> SELECT * FROM regions;
+
+RNAME                          POPULATION NUMBER_OF_TOWNS                       
+------------------------------ ---------- ---------------                       
+Arcadia                             38000              12                       
+Shadow Isles                          400               1                       
+
+2 rows selected.
+
+SQL> 
+SQL> --
+SQL> 
+SQL> -- Queries
+SQL> 
+SQL> -- Q1 - A join involving at least four relations
+SQL> -- Find the itemName of every item sold in the same region a character (Locke) is from
+SQL> SELECT DISTINCT SL.itemName
+  2  FROM shops S, sells SL, towns T, characters C
+  3  WHERE (SL.storeName = S.sName) AND (S.sTown = T.tName) AND (T.tRegion = C.cRegion);
+
+ITEMNAME                                                                        
+------------------------------                                                  
+Mystery meat                                                                    
+ham                                                                             
+milk                                                                            
+Darkwood Staff                                                                  
+Rhongomiant                                                                     
+Aiglos                                                                          
+Gungnir                                                                         
+
+7 rows selected.
+
+SQL> 
+SQL> -- Q2 - A self-join
+SQL> -- Find pairs of character names, levels, and races that have a level higher than 30 but are different races.
+SQL> SELECT C1.cName, C1.cLevel, C1.race, C2.cName, C2.cLevel, C2.race
+  2  FROM characters C1, characters C2
+  3  WHERE C1.cLevel > 30 AND
+  4  	     C1.race != C2.race AND
+  5  	     C2.cLevel > 30;
+
+CNAME                              CLEVEL RACE                                  
+------------------------------ ---------- ---------------                       
+CNAME                              CLEVEL RACE                                  
+------------------------------ ---------- ---------------                       
+Syllphi Yaru                           45 Elf                                   
+Locke                                  88 Human                                 
+                                                                                
+Syllphi Yaru                           45 Elf                                   
+Gebadia                                70 Human                                 
+                                                                                
+Syllphi Yaru                           45 Elf                                   
+Garrosh Hellscream                     99 Orc                                   
+                                                                                
+
+CNAME                              CLEVEL RACE                                  
+------------------------------ ---------- ---------------                       
+CNAME                              CLEVEL RACE                                  
+------------------------------ ---------- ---------------                       
+Locke                                  88 Human                                 
+Syllphi Yaru                           45 Elf                                   
+                                                                                
+Locke                                  88 Human                                 
+Garrosh Hellscream                     99 Orc                                   
+                                                                                
+Gebadia                                70 Human                                 
+Syllphi Yaru                           45 Elf                                   
+                                                                                
+
+CNAME                              CLEVEL RACE                                  
+------------------------------ ---------- ---------------                       
+CNAME                              CLEVEL RACE                                  
+------------------------------ ---------- ---------------                       
+Gebadia                                70 Human                                 
+Garrosh Hellscream                     99 Orc                                   
+                                                                                
+Garrosh Hellscream                     99 Orc                                   
+Syllphi Yaru                           45 Elf                                   
+                                                                                
+Garrosh Hellscream                     99 Orc                                   
+Locke                                  88 Human                                 
+                                                                                
+
+CNAME                              CLEVEL RACE                                  
+------------------------------ ---------- ---------------                       
+CNAME                              CLEVEL RACE                                  
+------------------------------ ---------- ---------------                       
+Garrosh Hellscream                     99 Orc                                   
+Gebadia                                70 Human                                 
+                                                                                
+
+10 rows selected.
+
+SQL> 
+SQL> -- Q3 - UNION, INTERSECT, and/or MINUS
+SQL> -- Find the mName, mLevel, and mSTR of Monsters that have a level above 9 and a STR above 40 AND infests the Castle Ruins
+SQL> SELECT M.mName, M.mLevel, M.mSTR
+  2  FROM    monsters M
+  3  WHERE   (M.mLevel > 9) AND (M.mSTR > 40)
+  4  INTERSECT
+  5  SELECT M.mName, M.mLevel, M.mSTR
+  6  FROM    monsters M, infests I
+  7  WHERE   (M.mName = I.monster) AND (I.dungeon = 'Castle Ruins');
+
+MNAME                              MLEVEL       MSTR                            
+------------------------------ ---------- ----------                            
+Goblin                                 10         70                            
+
+1 row selected.
+
+SQL> 
+SQL> -- Q4 - SUM, AVG, MAX, and/or MIN.
+SQL> -- Find, listed by dungeon, the AVG, MIN, and MAX mLevel and mHP for every monster in that infests that dungeon.
+SQL> SELECT I.dungeon, AVG(mLevel), MIN(mLevel), MAX(mLevel), AVG(mHP), MIN(mHP), MAX(mHP)
+  2  FROM    monsters M, infests I
+  3  WHERE  I.monster = M.mName
+  4  GROUP BY I.dungeon;
+
+DUNGEON                        AVG(MLEVEL) MIN(MLEVEL) MAX(MLEVEL)   AVG(MHP)   
+------------------------------ ----------- ----------- ----------- ----------   
+  MIN(MHP)   MAX(MHP)                                                           
+---------- ----------                                                           
+Castle Ruins                            10          10          10        300   
+       300        300                                                           
+                                                                                
+Abadoned Mines                          15          15          15        450   
+       400        500                                                           
+                                                                                
+
+2 rows selected.
+
+SQL> 
+SQL> -- Q5 - GROUP BY, HAVING, and ORDER BY, all appearing in the same query
+SQL> -- Find the sName, sTown, and number of items sold by all shops that sell more than 2 items, sorted greatest number sold to least
+SQL> SELECT S.sName, S.sTown, COUNT(*)
+  2  FROM    shops S, sells SE
+  3  WHERE   SE.storeName = S.sName
+  4  GROUP BY S.sName, S.sTown
+  5  HAVING  COUNT(*) > 2
+  6  ORDER BY COUNT(*) DESC;
+
+SNAME                          STOWN                            COUNT(*)        
+------------------------------ ------------------------------ ----------        
+Polearm Emporium               Port Prodigal                           4        
+Jeff"s Barn                    Port Prodigal                           3        
+
+2 rows selected.
+
+SQL> 
+SQL> -- Q6 - A correlated subquery
+SQL> -- Find the sName of shops that are in the town called Veil and sell no items.
+SQL> SELECT S.sName
+  2  FROM shops S
+  3  WHERE S.sTown = 'Veil' AND
+  4  	     NOT EXISTS (SELECT *
+  5  			     FROM sells SE
+  6  			     WHERE SE.storeName = S.sName);
+
+SNAME                                                                           
+------------------------------                                                  
+Bob"s Bows                                                                      
+
+1 row selected.
+
+SQL> 
+SQL> -- Q7 - A non-correlated subquery
+SQL> -- Find the sName of shops that are in the town called Veil and sell no items.
+SQL> SELECT S.sName
+  2  FROM shops S
+  3  WHERE S.sTown = 'Veil' AND
+  4  	     S.sName NOT IN (SELECT SE.storeName
+  5  			     FROM sells SE);
+
+SNAME                                                                           
+------------------------------                                                  
+Bob"s Bows                                                                      
+
+1 row selected.
+
+SQL> 
+SQL> -- Q8 - A relational DIVISION query.
+SQL> -- Find the sName, sType of all stores in the Shadow Isles regions.
+SQL> SELECT S.sName, S.sType
+  2  FROM    shops S
+  3  WHERE   NOT EXISTS((SELECT R.rName
+  4  			 FROM regions R
+  5  			 WHERE R.rName = 'Shadow Isles')
+  6  		     MINUS
+  7  		     (SELECT R.rName
+  8  		     FROM towns T, regions R
+  9  		     WHERE T.tRegion = R.rName AND
+ 10  			     T.tName = S.sTown AND
+ 11  			     R.rName = 'Shadow Isles'));
+
+SNAME                          STYPE                                            
+------------------------------ ----------                                       
+Jeff"s Barn                    Grocery                                          
+Polearm Emporium               Weapon                                           
+
+2 rows selected.
+
+SQL> 
+SQL> 
+SQL> -- Q9 - An outer join query
+SQL> -- Find the cName, race, level, and carried items for every character, and show the items for those who carry them.
+SQL> SELECT C.cName, C.race, C.cLevel, I.itemName
+  2  FROM    characters C LEFT OUTER JOIN carrying I ON C.cName = I.chName;
+
+CNAME                          RACE                CLEVEL                       
+------------------------------ --------------- ----------                       
+ITEMNAME                                                                        
+------------------------------                                                  
+Garrosh Hellscream             Orc                     99                       
+Hellscream"s Doomblade                                                          
+                                                                                
+Syllphi Yaru                   Elf                     45                       
+potion                                                                          
+                                                                                
+Locke                          Human                   88                       
+                                                                                
+                                                                                
+
+CNAME                          RACE                CLEVEL                       
+------------------------------ --------------- ----------                       
+ITEMNAME                                                                        
+------------------------------                                                  
+Gebadia                        Human                   70                       
+                                                                                
+                                                                                
+
+4 rows selected.
+
+SQL> 
+SQL> 
+SQL> -- Testing ICs
+SQL> 
+SQL> -- Testing: rePK
+SQL> -- Should reject, since this is not a unique region value, we already have an Arcadia
+SQL> INSERT INTO regions VALUES ('Arcadia', 1515, 20);
+INSERT INTO regions VALUES ('Arcadia', 1515, 20)
+*
+ERROR at line 1:
+ORA-00001: unique constraint (GILLZ.RPK) violated 
+
+
+SQL> 
+SQL> -- Testing: cFK
+SQL> -- Should be rejected, since no region called 'Test' exists.
+SQL> INSERT INTO characters VALUES('Tester McTestington', 88, 'Human', 5400, 3020, 160, 500, 100, null, 'Test');
+INSERT INTO characters VALUES('Tester McTestington', 88, 'Human', 5400, 3020, 160, 500, 100, null, 'Test')
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (GILLZ.CFK) violated - parent key not found 
+
+
+SQL> 
+SQL> 
+SQL> -- Testing: cLVL
+SQL> -- Reject, since level is greater than 100.
+SQL> INSERT INTO characters VALUES('Uber Level Man', 150, 'Human', 5400, 3020, 160, 500, 100, null, 'Shadow Isles');
+INSERT INTO characters VALUES('Uber Level Man', 150, 'Human', 5400, 3020, 160, 500, 100, null, 'Shadow Isles')
+*
+ERROR at line 1:
+ORA-02290: check constraint (GILLZ.CLVL) violated 
+
+
+SQL> 
+SQL> -- Reject, since level is less than 1.
+SQL> INSERT INTO characters VALUES('Impossible Level Man', -5, 'Human', 5400, 3020, 160, 500, 100, null, 'Shadow Isles');
+INSERT INTO characters VALUES('Impossible Level Man', -5, 'Human', 5400, 3020, 160, 500, 100, null, 'Shadow Isles')
+*
+ERROR at line 1:
+ORA-02290: check constraint (GILLZ.CLVL) violated 
+
+
+SQL> 
+SQL> -- Testing: mLoot
+SQL> -- Reject, since level is not less than 10 and loot IS NULL
+SQL> INSERT INTO monsters VALUES ('Rejected Monster', 25, null, 300, 90, 70, 55, 30);
+INSERT INTO monsters VALUES ('Rejected Monster', 25, null, 300, 90, 70, 55, 30)
+*
+ERROR at line 1:
+ORA-02290: check constraint (GILLZ.MLOOT) violated 
+
+
+SQL> 
+SQL> -- Accept, since loot is not null, but level is not less than 10.
+SQL> INSERT INTO monsters VALUES ('Accepted Tough Monster', 20, 'potion', 300, 90, 70, 55, 30);
+
+1 row created.
+
+SQL> 
+SQL> -- Accept, since loot is null but level is less than 10.
+SQL> INSERT INTO monsters VALUES ('Accepted Weak Monster', 2, null, 300, 90, 70, 55, 30);
+
+1 row created.
+
+SQL> 
+SQL> 
+SQL> SET ECHO OFF
